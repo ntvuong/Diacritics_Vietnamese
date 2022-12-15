@@ -1,0 +1,58 @@
+logger_params:
+    name_base: "VI_LSTM_test"
+    name_fields:  !!python/tuple [[data_params, random_seed], [train_params, batch_size]] #!!python/tuple [[net_params,num_blocks],[net_params,block_size],[net_params,dilation_base],[net_params,window_size]]
+    tags: !!python/tuple [Naplava,VI,diacritics,Adam]
+    accuracy_types: !!python/tuple [chr, imp_chr, alpha_word, amb_word, sntnc]
+    accuracy_plot_dashes: !!python/tuple [dotted,dotted,dashed,dashed,solid]
+    benchmarks: !!python/tuple [{"soft_deaccent":{"keep_rate": 0.2}}, {"deaccent": null}]
+    baselines: !!python/tuple [vi_dictionary]
+    #endplot_extend_from: /home/ntvuong/logs/diacritics/2022-11-18/10-23-25_VI_LSTM_test
+data_params:
+  language: "VI" # HU, PL, CZ, SK, VI
+
+  file_path: ../webcorpus_2/VN_tmp7
+  file_type: txt_dir
+  data_cut_rate: 0
+
+  max_length: 0
+  fixed_batch_lengths: false
+
+  charset: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,?!();:-%&=+/\\\"' \nÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐáàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ"
+  lower_case: true
+  pad_char: _
+  unk_char: '*'
+
+  random_seed: 15
+
+  sort_data_by_length: true
+  train_rate: 0.8
+  vocabThreshold: 50
+  batch_limit: 500
+net_params:
+  model_state_dict_path: #/home/ntvuong/logs/diacritics/2022-11-18/10-23-25_VI_LSTM_test/1_VI_LSTM_test__random_seed-15__batch_size-200/model/best_on_dev.pt
+  fname: LSTM.py
+  embedding_dim: 32
+  seq2seq_in_channels: 128
+  dropout: 0.2
+  batch_norm: true
+  
+  lstm_hidden_dim: 300
+  num_layers: 2
+  bidirectional: true
+  residual: true
+train_params:
+  batch_size: 200
+  early_stopping_delta: 0
+  early_stopping_window: 20
+  early_stopping_start: 50
+  epochs: 200
+  gradient_accumulation_steps: 1
+  infer_batch_size: 50
+  learning_rate: 0.0003
+  loss_fn: cross_entropy
+  parallel: true
+  save_final_model: false
+  eval_batch_limit: 50
+  augmentations:
+    deaccent: null
+wrong_examples_nmbr: 0
